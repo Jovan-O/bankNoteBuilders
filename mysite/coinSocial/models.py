@@ -91,22 +91,20 @@ class Item(models.Model):
         ('NORMAL', 'normal'),
         ('POOR', 'poor')
     ]
-    itemID = models.AutoField(primary_key=1)
+    id = models.AutoField(primary_key=1)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=30)
-    value = models.IntegerField()
-    condition = models.CharField(max_length=10, choices=conditionChoices)
+    name = models.CharField(max_length=30, null=1)
+    value = models.IntegerField(default=0)
+    condition = models.CharField(max_length=10, choices=conditionChoices, default='Normal')
     origin = models.CharField(max_length=30)
-    description = models.TextField(blank=1, null=1)
-    dateOfIssue = models.IntegerField()
+    description = models.TextField(blank=1, null=1)  # optional
+    dateOfIssue = models.DateTimeField("date of Issue", default="Unknown")
     # ideally would love to implement a feature that allows users to select the date range of a coin
-
     frontImg = models.ImageField(upload_to='moneyPhotos/front/')
     backImg = models.ImageField(upload_to='moneyPhotos/back/')
 
     def __str__(self):
-        return f'Item: {self.name} value: {self.value} condition: {self.condition} date: {self.dateOfIssue}'
+        return f'Item: {self.id} name: {self.name} condition: {self.condition}'
 
 
 class Post(models.Model):
@@ -120,4 +118,3 @@ class Post(models.Model):
 
     def __str__(self):
         return f'Post {self.postID} by {self.user}'
-
