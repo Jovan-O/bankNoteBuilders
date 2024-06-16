@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Coin Social Home Page</title>
 </head>
 <body>
-{% if collection_list %}
-    <ul>
-        {% for collection in collection_list %}
-        <!-- FIXME: This line below is causing problems when loading the website, need to figure out a way to make the collections link together with all items in that collection -->
-        <li><a href="{% url 'coinSocial:collections' collection.id %}">{{ collection.nameUG }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No collections have been created.</p>
-{% endif %}
+    <h1>Collections</h1>
+    {% if collection_list %}
+        <ul>
+            {% for collection in collection_list %}
+            <li><a href="{% url 'coinSocial:collection' collection.collectionID %}">{{ collection.nameUG }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No collections have been created.</p>
+    {% endif %}
 </body>
 </html>

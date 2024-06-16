@@ -4,5 +4,5 @@ from . import views
 app_name = 'coinSocial'
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
-    path("collections/<int:collectionID>/", views.CollectionView.as_view(), name="collection"),
+    path("collection/<int:collectionID>/", views.CollectionView.as_view(), name="collection"),
 ]

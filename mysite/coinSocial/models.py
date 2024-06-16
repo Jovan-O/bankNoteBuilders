@@ -96,7 +96,7 @@ class Item(models.Model):
 
     name = models.CharField(max_length=30)
     value = models.IntegerField()
-    condition = models.CharField(max_length=10, choices=conditionChoices)
+    condition = models.CharField(max_length=10, choices=conditionChoices, default="NORMAL")
     origin = models.CharField(max_length=30)
     description = models.TextField(blank=1, null=1)
     dateOfIssue = models.IntegerField()
