@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coin Social Home Page</title>
+</head>
+<body>
+    <h1>Collections</h1>
+    {% if collection_list %}
+        <ul>
+            {% for collection in collection_list %}
+            <li><a href="{% url 'coinSocial:collection' collection.collectionID %}">{{ collection.nameUG }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No collections have been created.</p>
+    {% endif %}
+</body>
+</html>
