@@ -35,13 +35,22 @@ class CollectionView(generic.ListView):
 class PostView(generic.ListView):
     template_name = "coinSocial/post.html"
 
-def collection_detail(request, collection_id):
-    collection = get_object_or_404(Collection, id=collection_id)
+class AccountCreationView(generic.ListView):
+    template_name = "coinSocial/registration/createaccount.html"
+
+    def get_queryset(self):
+        return HttpResponse("Ttest")
+
+def collection_detail(request, collectionID):
+    collection = get_object_or_404(Collection, id=collectionID)
     items = Item.objects.filter(collection=collection)  # Filter items by collection
 
     context = {
         'collection': collection,
         'coin_list': items
     }
+
+    print(collection.nameUG)
+    print([item.name for item in items])
 
     return render(request, 'coinSocial/templates/collection.html', context)
