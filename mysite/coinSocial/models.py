@@ -94,9 +94,9 @@ class Item(models.Model):
     id = models.AutoField(primary_key=1)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, null=1)
-    value = models.IntegerField(default=0)
+    value = models.IntegerField(default=0, null=1)
     condition = models.CharField(max_length=10, choices=conditionChoices, default='Normal')
-    origin = models.CharField(max_length=30)
+    origin = models.CharField(max_length=30, null=1)
     description = models.TextField(blank=1, null=1)  # optional
     dateOfIssue = models.DateTimeField("date of Issue", default="Unknown")
     # ideally would love to implement a feature that allows users to select the date range of a coin
