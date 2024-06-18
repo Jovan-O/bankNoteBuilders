@@ -85,39 +85,33 @@ class CollectionForm(forms.ModelForm):
 
 
 def create_collection(request):
+    success = False
     if request.method == 'POST':
         form = CollectionForm(request.POST)
         if form.is_valid():
             new_collection = form.save(commit=False)
             new_collection.owner = request.user  # Assign current user as the owner
             new_collection.save()
-            print("Before Redirecting")
-            return redirect('collection_created')
+            success = True
     else:
         form = CollectionForm()
-    return render(request, 'coinSocial/Create_Collection.html', {'form': form})
-
-def collection_created(request):
-    collections = Collection.objects.filter(owner=request.user)
-    return render(request, 'coinSocial/Collection_Created.html', {'collections': collections})
-
+    return render(request, 'coinSocial/create_collection.html', {'form': form, 'success': success})
 
 
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ['collection', 'name', 'value', 'condition', 'origin', 'description', 'dateOfIssue', 'frontImg', 'backImg']
+        fields = ['collection', 'name', 'value', 'condition', 'origin', 'description', 'dateOfIssue', 'frontImg',
+                  'backImg']
 
 
 def create_item(request):
+    success = False
     if request.method == 'POST':
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('item_created')
+            success = True
     else:
         form = ItemForm()
-    return render(request, 'coinSocial/post.html', {'form': form})
-
-def item_created(request):
-    return render(request, 'coinSocial/postsuccess.html')
+    return render(request, 'coinSocial/post.html', {'form': form, 'success': success})
