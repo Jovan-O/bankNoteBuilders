@@ -9,6 +9,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <button onclick="window.location.href='/create_collector_acc"> Create collector account</button>
         <button onclick="window.location.href='/coinSocial/createaccount'">Create Account</button>
         <button type="submit">Login</button>
     </form>

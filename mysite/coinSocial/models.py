@@ -5,10 +5,10 @@ from django.db import models
 
 
 class User(models.Model):
-    username = models.CharField(max_length=15)  # needs a value
+    username = models.CharField(max_length=15, )  # needs a value
     profilePic = models.ImageField(upload_to='profilePic/', null=1)
     userType = models.BooleanField(default=0)    # unless admin, admin gets 1
-    description = models.CharField(max_length=450)
+    description = models.CharField(max_length=450, null=1, blank=1)
 
 #  might add number of post later
     def __str__(self):
@@ -19,7 +19,7 @@ class User(models.Model):
 # class UserPic(User.Model)
 class Collector(models.Model):
     # all user generated so drop naming convention
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     # got set null error, cascading for now
     # set null should let us keep child records
     firstName = models.CharField(max_length=20)

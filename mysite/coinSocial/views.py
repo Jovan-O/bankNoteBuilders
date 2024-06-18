@@ -8,6 +8,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import *
 
+# importing forms
+from .forms import CreateCollectorAccountForm
+
 
 # Create your views here.
 
@@ -60,3 +63,14 @@ class CreateAccountView(generic.ListView):
         return HttpResponse("Test")
 
     # needs function to create account
+
+    def create_collector_acc(request):
+        if request.method == 'POST':
+            form = CreateCollectorAccountForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('index')
+
+        else:
+            form = CreateCollectorAccountForm()
+        return render(request, 'create_collector_acc.html', {'form': form})

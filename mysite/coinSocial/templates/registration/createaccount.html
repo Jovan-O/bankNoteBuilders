@@ -5,6 +5,13 @@
     <title>Create Account</title>
 </head>
 <body>
-This is where you would create an account.
+    <h2>Create Account</h2>
+    This is where you would create an account.
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <textarea >
+        <button type="submit">Create Account</button>
+    </form>
 </body>
 </html>
