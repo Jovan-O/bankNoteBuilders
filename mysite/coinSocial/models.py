@@ -59,7 +59,7 @@ class AdminRole(models.IntegerChoices):
 
 class Admin(models.Model):
     # q = Admin(user={USER_OBJECT}, firstName="some", lastName="name")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # might need to rework this line
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # might need to rework this line
     # got set null error, cascading for now
     firstName = models.CharField(max_length=20)
     lastName = models.CharField(max_length=20)
@@ -93,7 +93,7 @@ class ModerationLog(models.Model):
 
 
 class Collection(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=450)
     public = models.BooleanField(default=0)  # archive will be 1
