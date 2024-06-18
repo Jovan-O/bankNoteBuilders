@@ -5,20 +5,18 @@ from django.db import models
 
 
 class User(models.Model):
-    userNameUG = models.CharField(max_length=15)  # needs a value
-    profilePicUG = models.ImageField(upload_to='profilePic/', null=1)
+    username = models.CharField(max_length=15)  # needs a value
+    profilePic = models.ImageField(upload_to='profilePic/', null=1)
     userType = models.BooleanField(default=0)    # unless admin, admin gets 1
-    descriptionUG = models.CharField(max_length=450)
+    description = models.CharField(max_length=450)
 
 #  might add number of post later
     def __str__(self):
-        return f'User name: {self.userNameUG} and user ID: {self.id}'
+        return f'User name: {self.username} and user ID: {self.id}'
 
 
 # @User.register() create overloading for user pics
 # class UserPic(User.Model)
-
-
 class Collector(models.Model):
     # all user generated so drop naming convention
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -33,9 +31,9 @@ class Collector(models.Model):
 
 
 class AdminRole(models.IntegerChoices):
-    superAdmin = 1,
+    superAdmin = 3,
     moderator = 2,
-    contentCreator = 3,
+    contentCreator = 1,
 
 
 class Admin(models.Model):
@@ -48,7 +46,7 @@ class Admin(models.Model):
     # for selecting level of admin
 
     def __str__(self):
-        return f'Admin user: {self.user} Admin role: {self.role}'
+        return f'Admin full name: {self.firstName}, {self.lastName} Admin role lvl: {self.role}'
 
 
 class ModerationLog(models.Model):
@@ -67,7 +65,7 @@ class ModerationLog(models.Model):
         ('POST', 'post')
         # ('DM', 'message')
     ])  # description of type, could be user or post
-    notesUG = models.TextField(blank=1, null=1)
+    notes = models.TextField(blank=1, null=1)
 
     def __str__(self):
         return f"{self.action} by {self.admin} on {self.timestamp}"
@@ -75,17 +73,16 @@ class ModerationLog(models.Model):
 
 class Collection(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    nameUG = models.CharField(max_length=30)
-    descriptionUG = models.CharField(max_length=450)
-    publicUG = models.BooleanField(default=0)  # archive will be 1
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=450)
+    public = models.BooleanField(default=0)  # archive will be 1
 
     def __str__(self):
-        return f'Collection: {self.nameUG} and Owner: {self.owner}'
+        return f'Name of collection: {self.name} and Owner: {self.owner.username} and ID:{self.id}'
 
 
 class Item(models.Model):
     # all user generated so no need for convention
-    id = models.AutoField(primary_key=1)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, null=1)
     value = models.IntegerField(default=0, null=1)
@@ -97,7 +94,7 @@ class Item(models.Model):
     ], default='Normal')
     origin = models.CharField(max_length=30, null=1)
     description = models.TextField(blank=1, null=1)  # optional
-    dateOfIssue = models.DateTimeField("date of Issue", default="Unknown")
+    dateOfIssue = models.DateTimeField("date of Issue", null=1, blank=1)
     # ideally would love to implement a feature that allows users to select the date range of a coin
     frontImg = models.ImageField(upload_to='moneyPhotos/front/')
     backImg = models.ImageField(upload_to='moneyPhotos/back/')
@@ -108,11 +105,10 @@ class Item(models.Model):
 
 class Post(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     createdTime = models.DateTimeField(auto_now_add=1)
     editedTime = models.DateTimeField(auto_now=1)
 
     def __str__(self):
-        return f'Post {self.id} by {self.user}'
+        return f'Post {self.id} by {self.item.collection.owner.username}'
