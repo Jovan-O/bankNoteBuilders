@@ -1,0 +1,25 @@
+<!-- image_upload/templates/Collection_Created.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collection Created</title>
+</head>
+<body>
+    <h1>Collection Created Successfully!</h1>
+
+    {% if collections %}
+    <h2>Created Collections:</h2>
+    <ul>
+        {% for collection in collections %}
+        <li>{{ collection.nameUG }} - {{ collection.descriptionUG }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No collections created yet.</p>
+    {% endif %}
+
+    <a href="{% url 'create_collection' %}">Create Another Collection</a>
+</body>
+</html>

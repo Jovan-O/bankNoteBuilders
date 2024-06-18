@@ -73,11 +73,11 @@ class ModerationLog(models.Model):
 
 
 class Collection(models.Model):
-    collectionID = models.AutoField(primary_key=1)
+    collectionID = models.AutoField(primary_key=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     nameUG = models.CharField(max_length=30)
     descriptionUG = models.CharField(max_length=450)
-    publicUG = models.BooleanField(default=0)  # archive will be 1
+    publicUG = models.BooleanField(default=False)  # archive will be 1
 
     def __str__(self):
         return f'Collection: {self.nameUG} and Owner: {self.owner}'
@@ -91,9 +91,8 @@ class Item(models.Model):
         ('NORMAL', 'normal'),
         ('POOR', 'poor')
     ]
-    itemID = models.AutoField(primary_key=1)
+    itemID = models.AutoField(primary_key=True)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
-
     name = models.CharField(max_length=30)
     value = models.IntegerField()
     condition = models.CharField(max_length=10, choices=conditionChoices, default="NORMAL")
