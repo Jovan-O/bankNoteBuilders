@@ -15,7 +15,6 @@ class IndexView(generic.TemplateView):
     template_name = "coinSocial/index.html"
 
 
-# TODO: Figure out to link all items in a collection to a variable to access them in the views
 class CollectionDetailView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'coinSocial/collection.html'
     login_url = 'coinSocial:login'
@@ -57,17 +56,3 @@ class CreateAccountView(generic.ListView):
 
     def get_queryset(self):
         return HttpResponse("Test")
-
-def collection_detail(request, collectionID):
-    collection = get_object_or_404(Collection, id=collectionID)
-    items = Item.objects.filter(collection=collection)  # Filter items by collection
-
-    context = {
-        'collection': collection,
-        'coin_list': items
-    }
-
-    print(collection.nameUG)
-    print([item.name for item in items])
-
-    return render(request, 'coinSocial/templates/collection.html', context)
