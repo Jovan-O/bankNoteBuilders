@@ -1,30 +1,51 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+import string, random
 
 # database portion
 # Create your models here.
 
 
-class User(models.Model):
-    username = models.CharField(max_length=15, )  # needs a value
-    profilePic = models.ImageField(upload_to='profilePic/', null=1)
-    userType = models.BooleanField(default=0)    # unless admin, admin gets 1
-    description = models.CharField(max_length=450, null=1, blank=1)
+class CustomUser(AbstractUser):
+    username = models.CharField(max_length=15)  # needs a value
+    description = models.TextField(null=1, blank=1)
+
+    def save(self, username, description):
+        if not username:
+            self.username = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+            self.description = description
+            return self
+
+# class User(models.Model):
+#
+#     def generate_random_username(self):
+#         return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+#
+#     username = models.CharField(max_length=15, )  # needs a value
+#     profilePic = models.ImageField(upload_to='profilePic/', null=1)
+#     userType = models.BooleanField(default=0)    # unless admin, admin gets 1
+#
 
 #  might add number of post later
-    def __str__(self):
-        return f'User name: {self.username} and user ID: {self.id}'
 
 
 # @User.register() create overloading for user pics
 # class UserPic(User.Model)
 class Collector(models.Model):
     # all user generated so drop naming convention
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     # got set null error, cascading for now
     # set null should let us keep child records
     firstName = models.CharField(max_length=20)
     lastName = models.CharField(max_length=20)
     email = models.CharField(max_length=30)
+
+    # def save (self, *args, **kwargs):
+    #     if not self.pk:  # Check if the Collector object is being created
+    #         username = generate_random_username()
+    #         user = User.objects.create(username=username)
+    #         self.user = user
 
     def __str__(self):
         return f'Collector name: {self.user} and Collector email {self.email}'
