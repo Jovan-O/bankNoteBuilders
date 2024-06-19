@@ -1,20 +1,19 @@
-<!-- image_upload/templates/upload_image.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload Image</title>
+    <title>Create Post</title>
 </head>
 <body>
-    <h1>Upload Image</h1>
+    <h1>Create Post</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Post</button>
+    </form>
     {% if success %}
         <p>Post uploaded successfully</p>
     {% endif %}
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload</button>
-    </form>
+    <button onclick="window.location.href='/coinSocial/dashboard/'">Dashboard</button>
 </body>
 </html>

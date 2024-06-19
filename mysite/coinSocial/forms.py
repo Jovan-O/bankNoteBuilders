@@ -1,5 +1,7 @@
 from django import forms
-from .models import Collection
+from .models import Collection, Item
+
+
 
 class CollectionForm(forms.ModelForm):
     class Meta:
@@ -9,3 +11,10 @@ class CollectionForm(forms.ModelForm):
             'descriptionUG',
             'publicUG'
         ]
+
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'value', 'condition', 'origin', 'description', 'dateOfIssue', 'frontImg',
+                  'backImg']
+

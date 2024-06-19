@@ -2,18 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ collection.nameUG }}</title>
+    <title>{{ collection.name }}</title>
 </head>
 <body>
-    <h1>Items in {{ collection.nameUG }}</h1>
-    {% if coin_list %}
+    <h1>{{ collection.name }}</h1>
+    <p>{{ collection.description }}</p>
+
+    <h2>Items in this Collection:</h2>
+    {% if item_list %}
         <ul>
-            {% for item in coin_list %}
-                <li>{{ item.name }}</li>
+            {% for item in item_list %}
+                <li>
+                    <h3>{{ item.name }}</h3>
+                    <p>Value: {{ item.value }}</p>
+                    <p>Condition: {{ item.condition }}</p>
+                    <p>Origin: {{ item.origin }}</p>
+                    <p>Description: {{ item.description }}</p>
+                    <p>Date of Issue: {{ item.dateOfIssue }}</p>
+                    <img src="{{ item.frontImg.url }}" alt="{{ item.name }} Front Image">
+                    <img src="{{ item.backImg.url }}" alt="{{ item.name }} Back Image">
+                </li>
             {% endfor %}
         </ul>
     {% else %}
         <p>No items found in this collection.</p>
     {% endif %}
+
+    <button onclick="window.location.href='/coinSocial/dashboard'">Dashboard</button>
+    <button onclick="window.location.href='/coinSocial/create-item/{{ collection.collectionID }}/'">Create Post</button>
 </body>
 </html>
