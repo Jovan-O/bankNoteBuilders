@@ -1,21 +1,37 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseForbidden
 from django.views import generic
 from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 from .models import Collection, Item
-
+from .forms import CollectionForm
 
 # Create your views here.
 
-class IndexView(generic.ListView):
+class IndexView(generic.TemplateView):
     template_name = "coinSocial/index.html"
-    collection_list = Collection.objects.all()
-
-    def get_queryset(self):
-        """Return the user's collections and list them"""
-        return Collection.objects.all()
 
 
+class CollectionDetailView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'coinSocial/collection.html'
+    login_url = 'coinSocial:login'
+
+    def dispatch(self, request, *args, **kwargs):
+        collection_id = self.kwargs.get('collectionID')
+        self.collection = get_object_or_404(Collection, collectionID=collection_id)
+
+        # Check if the logged-in user is the owner of the collection
+        if self.request.user != self.collection.owner:
+            return HttpResponseForbidden("You do not own this collection")
+
+        return super().dispatch(request, *args, **kwargs)
 # TODO: Figure out to link all items in a collection to a variable to access them in the views
 class CollectionView(generic.ListView):
     template_name = "coinSocial/collection.html"
@@ -27,8 +43,8 @@ class CollectionView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        collection_id = self.kwargs.get('collectionID')
-        context['coin_list'] = Item.objects.filter(collection_id=collection_id)
+        context['coin_list'] = Item.objects.filter(collection=self.collection)
+        context['collection'] = self.collection
         return context
 
 
@@ -37,28 +53,41 @@ class CollectionView(generic.ListView):
 class PostView(generic.ListView):
     template_name = "coinSocial/post.html"
 
+# This used to be a template view
+class DashboardView(generic.ListView, LoginRequiredMixin):
+    template_name = "coinSocial/dashboard.html"
+    login_url = 'coinSocial:login'
+    redirect_field_name = 'next'
+
+    collection_list = Collection.objects.all()
 
 class AccountCreationView(generic.ListView):
     template_name = "coinSocial/registration/createaccount.html"
 
     def get_queryset(self):
-        return HttpResponse("Ttest")
+        """Return the user's collections and list them"""
+        return Collection.objects.filter(owner=self.request.user)
 
 
 def makecollections(request, collectionID):
     collection = get_object_or_404(Collection, id=collectionID)
     items = Item.objects.filter(collection=collection)  # Filter items by collection
 
-    context = {
-        'collection': collection,
-        'coin_list': items
-    }
+class RegisterView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('coinSocial:login')
+    template_name = 'registration/register.html'
 
-    print(collection.nameUG)
-    print([item.name for item in items])
 
-    return render(request, 'coinSocial/templates/collection.html', context)
+class CollectionCreateView(generic.CreateView):
+    model = Collection
+    form_class = CollectionForm
+    template_name = 'coinSocial/create_collection.html'
+    success_url = reverse_lazy('coinSocial:dashboard')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # Set the owner to the current user
+        return super().form_valid(form)
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Search', max_length=100)
