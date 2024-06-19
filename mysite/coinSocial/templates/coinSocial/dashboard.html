@@ -19,6 +19,10 @@
         <p>No collections have been created.</p>
     {% endif %}
 
-    <button>Logout</button>
+    <a href="{% url 'logout' %}" class="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+
 </body>
 </html>
