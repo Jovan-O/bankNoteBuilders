@@ -1,19 +1,9 @@
+import django.contrib.auth.models
 from django.db import models
 from django.contrib.auth.models import User
 
 # database portion
 # Create your models here.
-
-
-# class User(models.Model):
-#     userID = models.IntegerField(primary_key=1)
-#     profilePicUG = models.ImageField(upload_to='profilePic/')
-#     userType = models.BooleanField(default=0)    # unless admin, admin gets 1
-#     descriptionUG = models.CharField(max_length=450)
-#  might add number of post later
-
-# @User.register() create overloading for user pics
-# class UserPic(User.Model)
 
 
 class Collector(models.Model):

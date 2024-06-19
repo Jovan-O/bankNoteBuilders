@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Collection, Item
-
+from .forms import CollectionForm
 
 # Create your views here.
 
@@ -56,3 +56,14 @@ class RegisterView(generic.CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('coinSocial:login')
     template_name = 'registration/register.html'
+
+
+class CollectionCreateView(generic.CreateView):
+    model = Collection
+    form_class = CollectionForm
+    template_name = 'coinSocial/create_collection.html'
+    success_url = reverse_lazy('coinSocial:dashboard')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # Set the owner to the current user
+        return super().form_valid(form)
