@@ -1,11 +1,33 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'coinSocial/index.css' %}">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coin Social Home Page</title>
 </head>
 <body>
-        <button onclick="window.location.href='/coinSocial/login'">Login Page</button>
-
+    <div class="container">
+        <header>
+            <h1>Welcome to Coin Social</h1>
+            <p>Your go-to platform for coin collections and social interaction with fellow enthusiasts.</p>
+        </header>
+        <div class="buttons">
+            <button onclick="window.location.href='/coinSocial/login'">Login Page</button>
+            <button onclick="window.location.href='/coinSocial/register'">Register</button>
+        </div>
+        <div class="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Create and manage your own coin collections.</li>
+                <li>Share your collections with others.</li>
+                <li>Discover and follow other coin enthusiasts.</li>
+                <li>Stay updated with the latest coin news.</li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

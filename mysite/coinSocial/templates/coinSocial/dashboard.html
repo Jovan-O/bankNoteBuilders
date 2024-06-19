@@ -1,28 +1,33 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'coinSocial/dashboard.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ user.username }}'s Home Page</title>
 </head>
 <body>
-    <h1>Welcome to the Dashboard {{ user.username }}!</h1>
-    <p>This page is only accessible to logged-in users.</p>
+    <div class="container">
+        <h1>Welcome to the Dashboard {{ user.username }}!</h1>
+        <p>Please select the collection you wish to view or create a new one!</p>
 
-    <h1>Collections</h1>
-    {% if collection_list %}
-        <ul>
-            {% for collection in collection_list %}
-            <li><a href="{% url 'coinSocial:collection' collection.collectionID %}">{{ collection.nameUG }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No collections have been created.</p>
-    {% endif %}
-    <button onclick="window.location.href='/coinSocial/create_collection'">Create Collection</button>
-    <button href="{% url 'logout' %}" class="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
-    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-        {% csrf_token %}
-    </form>
-
+        <h1>Collections</h1>
+        {% if collection_list %}
+            <ul>
+                {% for collection in collection_list %}
+                <li><a href="{% url 'coinSocial:collection' collection.collectionID %}">{{ collection.nameUG }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No collections have been created.</p>
+        {% endif %}
+        <button onclick="window.location.href='/coinSocial/create_collection'">Create Collection</button>
+        <button href="{% url 'logout' %}" class="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
+        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+            {% csrf_token %}
+        </form>
+    </div>
 </body>
 </html>
