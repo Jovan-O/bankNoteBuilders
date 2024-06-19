@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 ]
 
 # for directing media entries
-MEDIA_URL = 'coinSocial/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MIDDLEWARE = [
