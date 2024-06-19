@@ -1,0 +1,22 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'coinSocial/delete_item.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Item</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Are you sure you want to delete the item "{{ item.name }}"?</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="button">Yes, Delete</button>
+            <button type="button" class="button" onclick="window.history.back()">Cancel</button>
+        </form>
+    </div>
+</body>
+</html>

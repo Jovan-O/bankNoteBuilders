@@ -17,7 +17,13 @@
         {% if collection_list %}
             <ul>
                 {% for collection in collection_list %}
-                <li><a href="{% url 'coinSocial:collection' collection.collectionID %}">{{ collection.nameUG }}</a></li>
+                <li>
+                    <a href="{% url 'coinSocial:collection' collection.collectionID %}">{{ collection.nameUG }}</a>
+                    <form method="post" action="{% url 'coinSocial:delete_collection' collection.collectionID %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </li>
                 {% endfor %}
             </ul>
         {% else %}

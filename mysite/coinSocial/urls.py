@@ -14,6 +14,8 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('create_collection/', views.CollectionCreateView.as_view(), name='create_collection'),
+    path('delete-collection/<int:collectionID>/', views.delete_collection, name='delete_collection'),
+    path('delete_item/<int:itemID>/', views.delete_item, name='delete_item'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

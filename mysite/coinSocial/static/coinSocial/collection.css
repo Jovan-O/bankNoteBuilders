@@ -52,23 +52,52 @@ ul li {
     border-radius: 5px;
     padding: 20px;
     margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: 20px;
+    align-items: start;
 }
 
-ul li h3 {
-    color: #007bff;
-    margin-bottom: 10px;
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-ul li p {
+.item-details {
+    grid-column: span 2;
+}
+
+.item-details p {
     margin: 5px 0;
 }
 
-ul li img {
-    max-width: 100%;
-    height: auto;
+.item-images {
+    display: flex;
+    gap: 10px;
     margin-top: 10px;
+}
+
+.item-images img {
+    max-width: 100px;
+    height: auto;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.delete-button {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: darkred;
 }
 
 button {
@@ -79,7 +108,7 @@ button {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    margin: 10px;
+    margin-top: 20px;
     transition: background-color 0.3s;
     width: 200px;
 }

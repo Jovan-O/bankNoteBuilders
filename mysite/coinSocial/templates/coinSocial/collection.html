@@ -18,14 +18,24 @@
             <ul>
                 {% for item in item_list %}
                     <li>
-                        <h3>{{ item.name }}</h3>
-                        <p>Value: {{ item.value }}</p>
-                        <p>Condition: {{ item.condition }}</p>
-                        <p>Origin: {{ item.origin }}</p>
-                        <p>Description: {{ item.description }}</p>
-                        <p>Date of Issue: {{ item.dateOfIssue }}</p>
-                        <img src="{{ item.frontImg.url }}" alt="{{ item.name }} Front Image">
-                        <img src="{{ item.backImg.url }}" alt="{{ item.name }} Back Image">
+                        <div class="item-header">
+                            <h3>{{ item.name }}</h3>
+                            <form method="post" action="{% url 'coinSocial:delete_item' item.itemID %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+                        </div>
+                        <div class="item-details">
+                            <p><strong>Value:</strong> {{ item.value }}</p>
+                            <p><strong>Condition:</strong> {{ item.condition }}</p>
+                            <p><strong>Origin:</strong> {{ item.origin }}</p>
+                            <p><strong>Description:</strong> {{ item.description }}</p>
+                            <p><strong>Date of Issue:</strong> {{ item.dateOfIssue }}</p>
+                        </div>
+                        <div class="item-images">
+                            <img src="{{ item.frontImg.url }}" alt="{{ item.name }} Front Image">
+                            <img src="{{ item.backImg.url }}" alt="{{ item.name }} Back Image">
+                        </div>
                     </li>
                 {% endfor %}
             </ul>

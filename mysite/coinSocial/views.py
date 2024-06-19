@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from django.views import generic
 from django import forms
@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from .models import Collection, Item
 from .forms import CollectionForm, ItemForm
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -104,3 +105,21 @@ class ItemCreateView(generic.CreateView):
         form.instance.collection = self.collection  # Assign the current collection to the item
         form.instance.owner = self.request.user  # Assign current user as the owner
         return super().form_valid(form)
+
+
+@login_required
+def delete_collection(request, collectionID):
+    collection = get_object_or_404(Collection, collectionID=collectionID, owner=request.user)
+    if request.method == 'POST':
+        collection.delete()
+        return redirect('coinSocial:dashboard')
+    return render(request, 'delete_collection.html', {'collection': collection})
+
+@login_required
+def delete_item(request, itemID):
+    item = get_object_or_404(Item, itemID=itemID, collection__owner=request.user)
+    if request.method == 'POST':
+        collectionID = item.collection.collectionID
+        item.delete()
+        return redirect('coinSocial:collection', collectionID=collectionID)
+    return render(request, 'delete_item.html', {'item': item})
