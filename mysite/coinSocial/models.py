@@ -1,5 +1,3 @@
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import User
 from django.db import models
 
 import string
@@ -8,12 +6,16 @@ import random
 
 # database portion
 # Create your models here.
+class User(models.Model):
+    username = models.CharField(max_length=15)  # needs a value
+    profilePic = models.ImageField(upload_to='profilePic/', null=1)
+    userType = models.BooleanField(default=0)    # unless admin, admin gets 1
+    description = models.CharField(max_length=450)
 
-
-class CustomUser(AbstractUser):
-    username = models.CharField(max_length=15, unique=1)  # needs a value
-    description = models.TextField(null=1, blank=1)
-
+    # def create_user(self, *args, **kwargs):
+    #     user = self.model(*args, **kwargs)
+    #     user.save(using=self._db)
+    #     return user
     # def save(self, username, description):
     #     if not username:
     #         name = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
@@ -23,14 +25,14 @@ class CustomUser(AbstractUser):
 #  might add number of post later
 
 
-# @User.register() create overloading for user pics
 # class UserPic(User.Model)
 class Collector(models.Model):
     # all user generated so drop naming convention
-    name = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
-    u = CustomUser.objects.create_user(username=name)
+    # name = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
+    # u = User
+    # t = User.objects.create_user(u, username=name)
 
-    user = models.OneToOneField(u, on_delete=models.CASCADE, null=1)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=1)
     # got set null error, cascading for now
     # set null should let us keep child records
     firstName = models.CharField(max_length=20)
@@ -55,19 +57,19 @@ class AdminRole(models.IntegerChoices):
 
 class Admin(models.Model):
     # q = Admin(user={USER_OBJECT}, firstName="some", lastName="name")
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # might need to rework this line
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # might need to rework this line
     # got set null error, cascading for now
     firstName = models.CharField(max_length=20)
     lastName = models.CharField(max_length=20)
     role = models.IntegerField(choices=AdminRole.choices, default=AdminRole.moderator)
     # for selecting level of admin
 
-    def save(self, *args, **kwargs):
-        if not self.user:  # Check if the Collector object is being created
-            u = CustomUser()
-            self.user = u
-            self.save()
-            return self
+    # def save(self, *args, **kwargs):
+    #     if not self.user:  # Check if the Collector object is being created
+    #         u = CustomUser()
+    #         self.user = u
+    #         self.save()
+    #         return self
 
     def __str__(self):
         return f'Admin full name: {self.firstName}, {self.lastName} Admin role lvl: {self.role}'
@@ -96,7 +98,7 @@ class ModerationLog(models.Model):
 
 
 class Collection(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=450)
     public = models.BooleanField(default=0)  # archive will be 1
