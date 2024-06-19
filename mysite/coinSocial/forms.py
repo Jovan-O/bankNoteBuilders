@@ -9,7 +9,7 @@ class CreateCollectorAccountForm(forms.ModelForm):
     #         'username',
     #     ]
 
-    class MetaTwo:
+    class Meta:
         model = Collector
         fields = [
             'firstName',

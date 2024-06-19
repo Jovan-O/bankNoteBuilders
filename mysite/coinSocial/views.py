@@ -73,4 +73,4 @@ class CreateAccountView(generic.ListView):
 
         else:
             form = CreateCollectorAccountForm()
-        return render(request, 'create_collector_acc.html', {'form': form})
+        return render(request, 'createaccount.html', {'form': form})

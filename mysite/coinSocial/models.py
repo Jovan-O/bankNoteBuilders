@@ -1,32 +1,25 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.db import models
 
-import string, random
+import string
+import random
+
 
 # database portion
 # Create your models here.
 
 
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=15)  # needs a value
+    username = models.CharField(max_length=15, unique=1)  # needs a value
     description = models.TextField(null=1, blank=1)
 
-    def save(self, username, description):
-        if not username:
-            self.username = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-            self.description = description
-            return self
-
-# class User(models.Model):
-#
-#     def generate_random_username(self):
-#         return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-#
-#     username = models.CharField(max_length=15, )  # needs a value
-#     profilePic = models.ImageField(upload_to='profilePic/', null=1)
-#     userType = models.BooleanField(default=0)    # unless admin, admin gets 1
-#
-
+    # def save(self, username, description):
+    #     if not username:
+    #         name = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    #         user = self.model(description=description, username=name)
+    #         user.save()
+    #         return user
 #  might add number of post later
 
 
@@ -34,18 +27,21 @@ class CustomUser(AbstractUser):
 # class UserPic(User.Model)
 class Collector(models.Model):
     # all user generated so drop naming convention
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    name = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
+    u = CustomUser.objects.create_user(username=name)
+
+    user = models.OneToOneField(u, on_delete=models.CASCADE, null=1)
     # got set null error, cascading for now
     # set null should let us keep child records
     firstName = models.CharField(max_length=20)
     lastName = models.CharField(max_length=20)
-    email = models.CharField(max_length=30)
+    email = models.CharField(max_length=30, unique=1)
 
-    # def save (self, *args, **kwargs):
-    #     if not self.pk:  # Check if the Collector object is being created
-    #         username = generate_random_username()
-    #         user = User.objects.create(username=username)
-    #         self.user = user
+    # def save(self, *args, **kwargs):
+    #     u = CustomUser.objects.create(username=name, description='NULL')
+    #     self.user = u
+    #     self.save()
+    #     return self
 
     def __str__(self):
         return f'Collector name: {self.user} and Collector email {self.email}'
@@ -65,6 +61,13 @@ class Admin(models.Model):
     lastName = models.CharField(max_length=20)
     role = models.IntegerField(choices=AdminRole.choices, default=AdminRole.moderator)
     # for selecting level of admin
+
+    def save(self, *args, **kwargs):
+        if not self.user:  # Check if the Collector object is being created
+            u = CustomUser()
+            self.user = u
+            self.save()
+            return self
 
     def __str__(self):
         return f'Admin full name: {self.firstName}, {self.lastName} Admin role lvl: {self.role}'
