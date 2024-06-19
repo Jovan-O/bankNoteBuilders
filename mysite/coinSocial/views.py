@@ -9,12 +9,19 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Collection, Item
 
+from django.shortcuts import render, get_object_or_404
+from .models import Post
+
+def view_post(request, post_id):
+    post = get_object_or_404(Post, postID=post_id)
+    return render(request, 'coinSocial/view_post.html', {'post': post})
+
 
 # Create your views here.
 
 class IndexView(generic.TemplateView):
     template_name = "coinSocial/index.html"
-
+    collection_list = Collection.objects.all()
 
 class CollectionDetailView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'coinSocial/collection.html'

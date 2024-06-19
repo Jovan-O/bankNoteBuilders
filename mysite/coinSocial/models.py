@@ -16,6 +16,11 @@ from django.contrib.auth.models import User
 # class UserPic(User.Model)
 
 
+
+
+
+
+
 class Collector(models.Model):
     # all user generated so drop naming convention
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -96,6 +101,8 @@ class Item(models.Model):
 
     name = models.CharField(max_length=30)
     value = models.IntegerField()
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     condition = models.CharField(max_length=10, choices=conditionChoices, default="NORMAL")
     origin = models.CharField(max_length=30)
     description = models.TextField(blank=1, null=1)
@@ -121,3 +128,10 @@ class Post(models.Model):
     def __str__(self):
         return f'Post {self.postID} by {self.user}'
 
+class UserSettings(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    notifications_enabled = models.BooleanField(default=True)
+    theme = models.CharField(max_length=20, choices=[('light', 'Light'), ('dark', 'Dark')], default='light')
+
+    def __str__(self):
+        return self.user.usernameUG
